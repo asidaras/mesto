@@ -14,7 +14,9 @@
   opacity: 1;
   transition: opacity 0.1s ease;
 }
+.profile__add-button:hover{
+  cursor: pointer;
+}
 .profile__add-button:active{
   opacity: 0.6;
-  cursor: pointer;
 }

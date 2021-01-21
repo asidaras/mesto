@@ -15,7 +15,9 @@
   opacity: 1;
   transition: opacity 0.1s ease;
 }
+.profile__edit-button:hover{
+  cursor: pointer;
+}
 .profile__edit-button:active{
   opacity: 0.6;
-  cursor: pointer;
 }
