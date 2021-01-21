@@ -1,0 +1,11 @@
+.profile__about{
+  margin: 0;
+  margin-top: 8px;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 18px;
+  line-height: 22px;
+  color: #FFFFFF;
+  grid-area: 'about';
+  align-self: start;
+}

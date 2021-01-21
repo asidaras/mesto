@@ -1,0 +1,11 @@
+.profile{
+  margin: 0 auto;
+  margin-top: 40px;
+  padding: 0;
+  max-width: 880px;
+  min-width: 320px;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: min-content; 
+  grid-auto-flow: column;
+}
