@@ -1,17 +1,14 @@
-.header{
-  margin: 45px auto 0 auto;
+.footer{
+  margin: 66px auto 60px auto;
+  padding: 0;
   max-width: 880px;
-  min-width: 320px;
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;
   justify-content: flex-start;
-  align-content: flex-start;
   box-sizing: border-box;
-  border-bottom: 1px solid rgba(54,54,54,0.7);
 }
 @media screen and (max-width: 768px) {
-  .header{
+  .footer{
     margin: 28px 0 0 0;
   }
 }

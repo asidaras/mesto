@@ -1,0 +1,10 @@
+.elements__element{
+  margin: 0;
+  padding: 0;
+/*  display: grid;
+  grid-template-columns: 1, max-content;
+  grid-template-rows: repeat(2, min-content);*/
+  background-color: white;
+  overflow: hidden;
+  border-radius: 10px;
+}

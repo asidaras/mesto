@@ -4,7 +4,6 @@
   width: 24px;
   height: 24px;
   opacity: 1;
-  grid-area: 'edit';
   align-self: end;
   border: 1px solid #FFFFFF;
   outline: none;
@@ -20,4 +19,11 @@
 }
 .profile__edit-button:active{
   opacity: 0.6;
+}
+@media screen and (max-width: 768px) {
+  .profile__edit-button{
+    margin-left: 10px;
+    width: 18px;
+    height: 18px;
+  }
 }

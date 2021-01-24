@@ -6,6 +6,14 @@
   font-size: 18px;
   line-height: 22px;
   color: #FFFFFF;
-  grid-area: 'about';
   align-self: start;
+}
+@media screen and (max-width: 768px) {
+  .profile__about{
+    margin: 4px auto;
+    grid-column: 1/3;
+    font-size: 14px;
+    line-height: 17px;
+    justify-self: center;
+  }
 }
