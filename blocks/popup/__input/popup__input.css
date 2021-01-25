@@ -1,0 +1,22 @@
+.popup__input{
+  margin: 46px auto 24px auto;
+  padding: 0 0 13px 0;
+  width: 83.25%;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 14px;
+  line-height: 17px;
+  box-sizing: border-box;
+  font-family: inherit;
+  outline: none;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+}
+.popup__input:nth-child(3){
+  margin: 0 auto 40px auto;
+}
+@media screen and (max-width: 645px) {
+  .popup__input{
+    margin: 74px auto 28px auto;
+  }
+}

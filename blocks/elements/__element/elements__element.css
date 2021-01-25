@@ -1,0 +1,9 @@
+.elements__element{
+  margin: 0 auto;
+  padding: 0;
+  max-width: 282px;
+  max-height: 362px;
+  background-color: white;
+  overflow: hidden;
+  border-radius: 10px;
+}
