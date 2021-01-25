@@ -3,5 +3,11 @@
   font-weight: normal;
   font-size: 18px;
   line-height: 22px;
-  color: white;
+  color: #545454;
+}
+@media screen and (max-width: 768px) {
+  .footer__text{
+    font-size: 14px;
+    line-height: 17px;
+  }
 }

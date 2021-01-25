@@ -10,5 +10,13 @@
 @media screen and (max-width: 768px) {
   .elements{
     margin: 50px 19px 0 19px;
+    grid-template-rows: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media screen and (max-width: 520px) {
+  .elements{
+    grid-template-rows: repeat(6, 1fr);
+    grid-template-columns: repeat(1, 1fr);
   }
 }
