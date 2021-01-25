@@ -3,11 +3,10 @@
   margin-bottom: 8px;
   width: 24px;
   height: 24px;
-  opacity: 1;
   align-self: end;
   border: 1px solid #FFFFFF;
   outline: none;
-  background-color: Transparent;
+  background-color: transparent;
   background: url("../../../images/profile/Edit.svg");
   background-repeat: no-repeat;
   background-position: center;
