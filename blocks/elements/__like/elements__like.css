@@ -14,7 +14,5 @@
 }
 .elements__like:hover{
   cursor: pointer;
-}
-.elements__like:active{
   opacity: 0.5;
 }

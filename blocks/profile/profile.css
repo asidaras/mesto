@@ -8,7 +8,7 @@
   grid-template-columns: min-content; 
   grid-auto-flow: column;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 940px) {
   .profile{
     margin: 42px 19px 0 19px;
     grid-template-rows: none;

@@ -7,7 +7,7 @@
   justify-content: flex-start;
   box-sizing: border-box;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 940px) {
   .footer{
     margin: 48px auto 36px auto;
     width: 88.125%;

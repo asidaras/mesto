@@ -1,9 +1,8 @@
 .elements__element{
-  margin: 0;
+  margin: 0 auto;
   padding: 0;
-/*  display: grid;
-  grid-template-columns: 1, max-content;
-  grid-template-rows: repeat(2, min-content);*/
+  max-width: 282px;
+  max-height: 362px;
   background-color: white;
   overflow: hidden;
   border-radius: 10px;

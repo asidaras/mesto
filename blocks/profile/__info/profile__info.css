@@ -1,5 +1,5 @@
 .profile__info{
-  margin: 0;
+  margin: 14px 0 0 0;
   margin-left: 30px;
   padding: 0;
   display: grid;
@@ -7,7 +7,7 @@
   grid-template-rows: 1fr 1fr;
   align-items: center;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 940px) {
   .profile__info{
     margin: auto;
     margin-top: 26px;
