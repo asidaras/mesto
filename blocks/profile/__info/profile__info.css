@@ -11,6 +11,5 @@
   .profile__info{
     margin: auto;
     margin-top: 26px;
-    grid-template-columns: fit-content max-content;
   }
 }
