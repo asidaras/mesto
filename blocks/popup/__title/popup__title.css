@@ -1,11 +1,11 @@
 .popup__title{
   margin: 0;
+  margin-top: 34px;
   margin-left: 36px;
   padding: 0;
   width: 92%;
   display: block;
   justify-self: start;
-  font-family: 'Inter Black';
   font-style: normal;
   font-weight: 900;
   font-size: 24px;
@@ -15,6 +15,7 @@
   .popup__title{
     font-size: 18px;
     line-height: 22px;
-    margin-left: 22px;
+    margin: 25px auto 0 auto;
+    width: 84%;
   }
 }

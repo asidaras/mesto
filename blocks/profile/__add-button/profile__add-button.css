@@ -15,8 +15,6 @@
 }
 .profile__add-button:hover{
   cursor: pointer;
-}
-.profile__add-button:active{
   opacity: 0.6;
 }
 @media screen and (max-width: 940px) {

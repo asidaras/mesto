@@ -15,11 +15,9 @@
 }
 .profile__edit-button:hover{
   cursor: pointer;
-}
-.profile__edit-button:active{
   opacity: 0.6;
 }
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 940px) {
   .profile__edit-button{
     margin-left: 10px;
     width: 18px;
