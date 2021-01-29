@@ -16,7 +16,7 @@
   margin: 44px 0 0 0;
 }
 @media screen and (max-width: 645px) {
-  .popup__input_type_about{
+  .popup__input{
     margin: 26px 0 0 0;
   }
   .popup__input:nth-of-type(1){
