@@ -1,0 +1,10 @@
+.elements__image-container{
+  margin: 0;
+  padding: 0;
+  border: 0px;
+  outline: none;
+  background-color: transparent;
+}
+.elements__image-container:hover{
+  cursor: pointer;
+}
