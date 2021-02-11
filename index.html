@@ -27,23 +27,36 @@
     <footer class="footer">
       <p class="footer__text">&#169; 2020 Mesto Russia</p>
     </footer>
-    <section class="popup">
+    <section class="popup popup_type_edit">
       <div class="popup__container">
         <h2 class="popup__title">Редактировать профиль</h2>
         <form class="popup__form" name="submit-form">
-          <input class="popup__input popup__input_type_name" type="text" name="first-input" value="" placeholder="Имя">
-          <input class="popup__input popup__input_type_about" type="text" name="second-input" value="" placeholder="О себе">
+          <input class="popup__input popup__input_type_name" type="text" name="name" value="" placeholder="Имя">
+          <input class="popup__input popup__input_type_about" type="text" name="about" value="" placeholder="О себе">
+          <button class="popup__save-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
+    </section>
+    <section class="popup popup_type_add">
+      <div class="popup__container">
+        <h2 class="popup__title">Новое место</h2>
+        <form class="popup__form" name="submit-form">
+          <input class="popup__input popup__input_type_title" type="text" name="title" value="" required placeholder="Название">
+          <input class="popup__input popup__input_type_link" type="text" name="link" value="" required placeholder="Ссылка на картинку">
           <button class="popup__save-button" type="submit">Сохранить</button>
         </form>
         <button class="popup__close-button" type="button"></button>
       </div>
     </section>
     <section class="popup-image">
-      <figure class="popup-image__figure">
-        <img class="popup-image__img" src="images/elements/Красноярск.jpg" alt="Красноярск">
-        <figcaption class="popup-image__figcaption">Красноярск</figcaption>
+      <div class="popup-image__figure-container">
+        <figure class="popup-image__figure">
+          <img class="popup-image__img" src="images/elements/Красноярск.jpg" alt="Красноярск">
+          <figcaption class="popup-image__figcaption">Красноярск</figcaption>
+        </figure>
         <button class="popup-image__close-button" type="button"></button>
-      </figure>
+      </div>
     </section>
   </div>
   <template id="picture-template">
