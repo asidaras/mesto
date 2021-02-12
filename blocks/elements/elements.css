@@ -5,23 +5,23 @@
   display: grid;
   justify-content: center;
   align-content: center;
-  grid-template-rows: repeat(1, 1fr);
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: 1fr;
+  grid-template-columns: repeat(3, 282px);
   grid-gap: 17px 20px;
 }
 @media screen and (max-width: 940px) {
   .elements{
     margin: 50px 19px 0 19px;
-    grid-template-rows: repeat(1, 1fr);
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(2, 282px);
   }
 }
 @media screen and (max-width: 645px) {
   .elements{
     margin: 36px auto 0 auto;
     max-width: 282px;
-    grid-template-rows: repeat(1, 1fr);
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-rows: 1fr;
+    grid-template-columns: repeat(1, 282px);
     gap: 20px;
   }
 }
