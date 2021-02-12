@@ -46,7 +46,10 @@ const initialCards = [
     name: 'Байкал',
     link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
   }
-]; 
+];
+
+popupEditFormElementName.value = profileName.textContent;
+popupEditFormElementAbout.value = profileAbout.textContent;
 
 function createCard(pictureName, pictureLink) {
   const pictureTemplate = document.querySelector('#picture-template').content;
@@ -105,6 +108,7 @@ function openPopup(popupElement){
 function closePopup(popupElement){
   popupElement.classList.remove('popup_opened');
 }
+
 
 initialCards.forEach(function(item) {
   addCard(createCard(item.name, item.link));
