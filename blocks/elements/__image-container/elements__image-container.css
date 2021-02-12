@@ -1,6 +1,7 @@
 .elements__image-container{
   margin: 0;
   padding: 0;
+  width: 100%;
   border: 0px;
   outline: none;
   background-color: transparent;
