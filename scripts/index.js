@@ -48,9 +48,6 @@ const initialCards = [
   }
 ];
 
-popupEditFormElementName.value = profileName.textContent;
-popupEditFormElementAbout.value = profileAbout.textContent;
-
 function createCard(pictureName, pictureLink) {
   const pictureTemplate = document.querySelector('#picture-template').content;
   const pictureElement = pictureTemplate.querySelector('.elements__element').cloneNode(true);
@@ -61,21 +58,9 @@ function createCard(pictureName, pictureLink) {
   pictureElementImage.alt = pictureName;
   pictureElement.querySelector('.elements__title').textContent = pictureName;
 
-  pictureElement.querySelector('.elements__like').addEventListener('click', function (evt) {
-    evt.target.classList.toggle('elements__like_active');
-  });
-
-  pictureElement.querySelector('.elements__remove').addEventListener('click', function (evt) {
-    evt.target.parentNode.remove();
-  });
-
-  pictureElement.querySelector('.elements__image-container').addEventListener('click', function (evt) {
-    const popupImageImg = popupImage.querySelector('.popup__image');
-    popupImageImg.src = evt.target.src;
-    popupImageImg.alt = evt.target.alt;
-    popupImage.querySelector('.popup__figcaption').textContent = evt.target.alt;
-    popupImage.classList.add('popup_opened');
-  });
+  pictureElement.querySelector('.elements__like').addEventListener('click', likePicture);
+  pictureElement.querySelector('.elements__remove').addEventListener('click', deletePicture);
+  pictureElement.querySelector('.elements__image-container').addEventListener('click', openPicture);
 
   return pictureElement;
 }
@@ -109,10 +94,28 @@ function closePopup(popupElement){
   popupElement.classList.remove('popup_opened');
 }
 
+function likePicture(evt){
+  evt.target.classList.toggle('elements__like_active');
+}
 
-initialCards.forEach(function(item) {
+function deletePicture(evt){
+  evt.target.parentNode.remove();
+}
+
+function openPicture(evt){
+  const popupImageImg = popupImage.querySelector('.popup__image');
+  popupImageImg.src = evt.target.src;
+  popupImageImg.alt = evt.target.alt;
+  popupImage.querySelector('.popup__figcaption').textContent = evt.target.alt;
+  openPopup(popupImage);
+}
+
+initialCards.forEach(function(item){
   addCard(createCard(item.name, item.link));
 });
+
+popupEditFormElementName.value = profileName.textContent;
+popupEditFormElementAbout.value = profileAbout.textContent;
 
 profileAddButton.addEventListener('click', () => openPopup(popupAdd));
 profileEditButton.addEventListener('click', () => openPopup(popupEdit));
