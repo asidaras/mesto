@@ -15,6 +15,12 @@
 .popup__input:nth-of-type(1){
   margin: 44px 0 0 0;
 }
+.popup__input:invalid{
+  border-bottom: 1px solid red;
+}
+.popup__input::placeholder{
+  color: #C4C4C4;
+}
 @media screen and (max-width: 645px) {
   .popup__input{
     margin: 26px 0 0 0;

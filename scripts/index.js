@@ -135,6 +135,9 @@ initialCards.forEach(function(item){
   addCard(createCard(item.name, item.link));
 });
 
+popupEditFormElementName.value = profileName.textContent;
+popupEditFormElementAbout.value = profileAbout.textContent;
+
 profileAddButton.addEventListener('click', openPlaceEditor);
 profileEditButton.addEventListener('click', openProfileEditor);
 popupImageCloseButton.addEventListener('click', closeImage);
