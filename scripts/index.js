@@ -124,6 +124,15 @@ function openPicture(evt){
 const openProfileEditor = () => {
   popupEditFormElementName.value = profileName.textContent;
   popupEditFormElementAbout.value = profileAbout.textContent;
+  popupEditFormElementName.dispatchEvent(new Event('input'));
+  popupEditFormElementAbout.dispatchEvent(new Event('input'));
+  /*dispatchEvent нужен для имитации события input, а следовательно
+  запуска checkInputValidity и toggleButtonState из validate.js в том случае,
+  если была стёрта строка имени либо описания и попап был закрыт. При следующем
+  открытии попапа поля будут снова заполены данными профиля, но без события input
+  валидатор посчитает это как за пустое поле на предыдущем шаге и будут высвечены ошибки,
+  заблокирована кнопка до тех пор, по не будет произведён ввод каких-либо значений
+  с клавиатуры, либо стирание символа.*/
   return openPopup(popupEdit);
 };
 const openPlaceEditor = () => openPopup(popupAdd);
@@ -135,9 +144,6 @@ initialCards.forEach(function(item){
   addCard(createCard(item.name, item.link));
 });
 
-popupEditFormElementName.value = profileName.textContent;
-popupEditFormElementAbout.value = profileAbout.textContent;
-
 profileAddButton.addEventListener('click', openPlaceEditor);
 profileEditButton.addEventListener('click', openProfileEditor);
 popupImageCloseButton.addEventListener('click', closeImage);
@@ -145,5 +151,5 @@ popupAddCloseButton.addEventListener('click', closePlaceEditor);
 popupEditCloseButton.addEventListener('click', closeProfileEditor);
 popupEditForm.addEventListener('submit', saveChangesInProfile);
 popupAddForm.addEventListener('submit', addNewPlace);
-document.addEventListener('keydown', closeAnyPopupOnEscapeKeydown);
-document.addEventListener('click', closeAnyPopupOnOverlayClick);
+document.addEventListener('keydown', closeAnyPopupOnEscapeKeydown); //закрытие popup на Esc
+document.addEventListener('click', closeAnyPopupOnOverlayClick); //закрытие popup кликом на фон
