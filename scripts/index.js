@@ -84,6 +84,7 @@ function addNewPlace(evt){
   evt.preventDefault();
   addCard(createCard(popupAddFormElementTitle.value, popupAddFormElementLink.value), true);
   closePopup(popupAdd);
+  popupAddForm.reset();
 }
 
 function openPopup(popupElement){
