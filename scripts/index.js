@@ -88,21 +88,23 @@ function addNewPlace(evt){
 
 function openPopup(popupElement){
   popupElement.classList.add('popup_opened');
+  document.addEventListener('keydown', closeAnyPopupOnEscapeKeydown); //установка слушателя закрытие popup на Esc
 }
 
 function closePopup(popupElement){
   popupElement.classList.remove('popup_opened');
+  document.removeEventListener('keydown', closeAnyPopupOnEscapeKeydown); //снятие слушателя закрытие popup на Esc
 }
 
 function closeAnyPopupOnOverlayClick(evt){
-  if (evt.target.classList.value.split(' ').includes('popup'))
-    evt.target.classList.remove('popup_opened');
+  if (evt.target.classList.contains('popup'))
+    closePopup(evt.target);
 }
 
 function closeAnyPopupOnEscapeKeydown(evt){
   const openedPopup = document.querySelector('.popup_opened');
   if (evt.key === "Escape" && openedPopup != null)
-    openedPopup.classList.remove('popup_opened');
+    closePopup(openedPopup);
 }
 
 function likePicture(evt){
@@ -121,6 +123,18 @@ function openPicture(evt){
   openPopup(popupImage);
 }
 
+function setEventListenersForClosePopup(){
+  const popups = document.querySelectorAll('.popup');
+  popups.forEach((popup) => {
+    popup.addEventListener('click', (evt) => {
+      if (evt.target.classList.contains('popup_opened'))
+        closePopup(popup);
+      if (evt.target.classList.contains('popup__close-button'))
+        closePopup(popup);
+    })
+  })
+}
+
 const openProfileEditor = () => {
   popupEditFormElementName.value = profileName.textContent;
   popupEditFormElementAbout.value = profileAbout.textContent;
@@ -136,20 +150,13 @@ const openProfileEditor = () => {
   return openPopup(popupEdit);
 };
 const openPlaceEditor = () => openPopup(popupAdd);
-const closeImage = () => closePopup(popupImage);
-const closePlaceEditor = () => closePopup(popupAdd);
-const closeProfileEditor = () => closePopup(popupEdit);
 
 initialCards.forEach(function(item){
   addCard(createCard(item.name, item.link));
 });
 
+setEventListenersForClosePopup(); //закрытие popup кликом на фон и на кнопку
 profileAddButton.addEventListener('click', openPlaceEditor);
 profileEditButton.addEventListener('click', openProfileEditor);
-popupImageCloseButton.addEventListener('click', closeImage);
-popupAddCloseButton.addEventListener('click', closePlaceEditor);
-popupEditCloseButton.addEventListener('click', closeProfileEditor);
 popupEditForm.addEventListener('submit', saveChangesInProfile);
 popupAddForm.addEventListener('submit', addNewPlace);
-document.addEventListener('keydown', closeAnyPopupOnEscapeKeydown); //закрытие popup на Esc
-document.addEventListener('click', closeAnyPopupOnOverlayClick); //закрытие popup кликом на фон
