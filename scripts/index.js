@@ -73,15 +73,15 @@ function addCard(card, prepend=false){
     pictureContainer.prepend(card);
 }
 
-function saveChangesInProfile(evt){
-  evt.preventDefault();
+function saveChangesInProfile(event){
+  event.preventDefault();
   profileName.textContent = popupEditFormElementName.value;
   profileAbout.textContent = popupEditFormElementAbout.value;
   closePopup(popupEdit);
 }
 
-function addNewPlace(evt){
-  evt.preventDefault();
+function addNewPlace(event){
+  event.preventDefault();
   addCard(createCard(popupAddFormElementTitle.value, popupAddFormElementLink.value), true);
   closePopup(popupAdd);
   popupAddForm.reset();
@@ -97,40 +97,40 @@ function closePopup(popupElement){
   document.removeEventListener('keydown', closeAnyPopupOnEscapeKeydown); //снятие слушателя закрытие popup на Esc
 }
 
-function closeAnyPopupOnOverlayClick(evt){
-  if (evt.target.classList.contains('popup'))
-    closePopup(evt.target);
+function closeAnyPopupOnOverlayClick(event){
+  if (event.target.classList.contains('popup'))
+    closePopup(event.target);
 }
 
-function closeAnyPopupOnEscapeKeydown(evt){
+function closeAnyPopupOnEscapeKeydown(event){
   const openedPopup = document.querySelector('.popup_opened');
-  if (evt.key === "Escape" && openedPopup != null)
+  if (event.key === "Escape" && openedPopup != null)
     closePopup(openedPopup);
 }
 
-function likePicture(evt){
-  evt.target.classList.toggle('elements__like_active');
+function likePicture(event){
+  event.target.classList.toggle('elements__like_active');
 }
 
-function deletePicture(evt){
-  evt.target.parentNode.remove();
+function deletePicture(event){
+  event.target.parentNode.remove();
 }
 
-function openPicture(evt){
+function openPicture(event){
   const popupImageImg = popupImage.querySelector('.popup__image');
-  popupImageImg.src = evt.target.src;
-  popupImageImg.alt = evt.target.alt;
-  popupImage.querySelector('.popup__figcaption').textContent = evt.target.alt;
+  popupImageImg.src = event.target.src;
+  popupImageImg.alt = event.target.alt;
+  popupImage.querySelector('.popup__figcaption').textContent = event.target.alt;
   openPopup(popupImage);
 }
 
 function setEventListenersForClosePopup(){
   const popups = document.querySelectorAll('.popup');
   popups.forEach((popup) => {
-    popup.addEventListener('click', (evt) => {
-      if (evt.target.classList.contains('popup_opened'))
+    popup.addEventListener('click', (event) => {
+      if (event.target.classList.contains('popup_opened'))
         closePopup(popup);
-      if (evt.target.classList.contains('popup__close-button'))
+      if (event.target.classList.contains('popup__close-button'))
         closePopup(popup);
     })
   })
