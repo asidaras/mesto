@@ -12,6 +12,7 @@ const popupEditFormElementName = popupEdit.querySelector(".popup__input_type_nam
 const popupEditFormElementAbout = popupEdit.querySelector(".popup__input_type_about");
 const popupEditForm = popupEdit.querySelector(".popup__form");
 
+const popups = document.querySelectorAll(".popup");
 const popupAdd = document.querySelector(".popup_type_add");
 const popupAddFormElementTitle = popupAdd.querySelector(".popup__input_type_title");
 const popupAddFormElementLink = popupAdd.querySelector(".popup__input_type_link");
@@ -99,7 +100,6 @@ function openPicture(event) {
 }
 
 function setEventListenersForClosePopup() {
-  const popups = document.querySelectorAll(".popup");
   popups.forEach((popup) => {
     popup.addEventListener("click", (event) => {
       if (event.target.classList.contains("popup_opened")) 
