@@ -1,3 +1,6 @@
+import Card from "../scripts/Card.js";
+import FormValidator from "../scripts/FormValidator.js";
+
 const profile = document.querySelector(".profile");
 const profileName = profile.querySelector(".profile__name");
 const profileAbout = profile.querySelector(".profile__about");
@@ -5,27 +8,16 @@ const profileEditButton = profile.querySelector(".profile__edit-button");
 const profileAddButton = profile.querySelector(".profile__add-button");
 
 const popupEdit = document.querySelector(".popup_type_edit");
-const popupEditCloseButton = popupEdit.querySelector(".popup__close-button");
-const popupEditFormElementName = popupEdit.querySelector(
-  ".popup__input_type_name"
-);
-const popupEditFormElementAbout = popupEdit.querySelector(
-  ".popup__input_type_about"
-);
+const popupEditFormElementName = popupEdit.querySelector(".popup__input_type_name");
+const popupEditFormElementAbout = popupEdit.querySelector(".popup__input_type_about");
 const popupEditForm = popupEdit.querySelector(".popup__form");
 
 const popupAdd = document.querySelector(".popup_type_add");
-const popupAddCloseButton = popupAdd.querySelector(".popup__close-button");
-const popupAddFormElementTitle = popupAdd.querySelector(
-  ".popup__input_type_title"
-);
-const popupAddFormElementLink = popupAdd.querySelector(
-  ".popup__input_type_link"
-);
+const popupAddFormElementTitle = popupAdd.querySelector(".popup__input_type_title");
+const popupAddFormElementLink = popupAdd.querySelector(".popup__input_type_link");
 const popupAddForm = popupAdd.querySelector(".popup__form");
 
 const popupImage = document.querySelector(".popup_type_img");
-const popupImageCloseButton = popupImage.querySelector(".popup__close-button");
 
 const pictureContainer = document.querySelector(".elements");
 
@@ -62,31 +54,6 @@ const initialCards = [
   },
 ];
 
-function createCard(pictureName, pictureLink) {
-  const pictureTemplate = document.querySelector("#picture-template").content;
-  const pictureElement = pictureTemplate
-    .querySelector(".elements__element")
-    .cloneNode(true);
-
-  const pictureElementImage = pictureElement.querySelector(".elements__image");
-
-  pictureElementImage.src = pictureLink;
-  pictureElementImage.alt = pictureName;
-  pictureElement.querySelector(".elements__title").textContent = pictureName;
-
-  pictureElement
-    .querySelector(".elements__like")
-    .addEventListener("click", likePicture);
-  pictureElement
-    .querySelector(".elements__remove")
-    .addEventListener("click", deletePicture);
-  pictureElement
-    .querySelector(".elements__image-container")
-    .addEventListener("click", openPicture);
-
-  return pictureElement;
-}
-
 function addCard(card, prepend = false) {
   if (prepend === false) {
     pictureContainer.append(card);
@@ -102,10 +69,8 @@ function saveChangesInProfile(event) {
 
 function addNewPlace(event) {
   event.preventDefault();
-  addCard(
-    createCard(popupAddFormElementTitle.value, popupAddFormElementLink.value),
-    true
-  );
+  const card = new Card(popupAddFormElementTitle.value, popupAddFormElementLink.value, openPicture, "#picture-template");
+  addCard(card.createCard(), true);
   closePopup(popupAdd);
   popupAddForm.reset();
 }
@@ -120,21 +85,10 @@ function closePopup(popupElement) {
   document.removeEventListener("keydown", closeAnyPopupOnEscapeKeydown); //снятие слушателя закрытие popup на Esc
 }
 
-function closeAnyPopupOnOverlayClick(event) {
-  if (event.target.classList.contains("popup")) closePopup(event.target);
-}
-
 function closeAnyPopupOnEscapeKeydown(event) {
   const openedPopup = document.querySelector(".popup_opened");
-  if (event.key === "Escape" && openedPopup != null) closePopup(openedPopup);
-}
-
-function likePicture(event) {
-  event.target.classList.toggle("elements__like_active");
-}
-
-function deletePicture(event) {
-  event.target.parentNode.remove();
+  if (event.key === "Escape" && openedPopup != null) 
+    closePopup(openedPopup);
 }
 
 function openPicture(event) {
@@ -172,8 +126,22 @@ const openProfileEditor = () => {
 };
 const openPlaceEditor = () => openPopup(popupAdd);
 
-initialCards.forEach(function (item) {
-  addCard(createCard(item.name, item.link));
+initialCards.forEach((item) => {
+  const card = new Card(item.name, item.link, openPicture, "#picture-template");
+  addCard(card.createCard());
+});
+
+const popupFormsList = Array.from(document.querySelectorAll('.popup__form'));
+popupFormsList.forEach((popupForm) => {
+  const validator = new FormValidator({
+    inputSelector: '.popup__input',
+    submitButtonSelector: '.popup__save-button',
+    inactiveButtonClass: 'popup__save-button_inactive',
+    inputErrorClass: 'popup__input_type_error',
+    errorClass: 'popup__input-error_active'
+  }
+  ,popupForm);
+  validator.enableValidation();
 });
 
 setEventListenersForClosePopup(); //закрытие popup кликом на фон и на кнопку

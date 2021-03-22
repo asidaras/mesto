@@ -1,7 +1,8 @@
 export default class Card {
-  constructor(name, link, templateSelector) {
+  constructor(name, link, openPicture, templateSelector) {
     this._name = name;
     this._link = link;
+    this._openPicture = openPicture;
     this._templateSelector = templateSelector;
   }
 
@@ -39,7 +40,7 @@ export default class Card {
       });
     this._pictureElement
       .querySelector(".elements__image-container")
-      .addEventListener("click", openPicture);
+      .addEventListener("click", this._openPicture);
   }
 
   createCard() {
