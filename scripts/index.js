@@ -16,6 +16,7 @@ const popups = document.querySelectorAll(".popup");
 const popupAdd = document.querySelector(".popup_type_add");
 const popupAddFormElementTitle = popupAdd.querySelector(".popup__input_type_title");
 const popupAddFormElementLink = popupAdd.querySelector(".popup__input_type_link");
+const popupAddFormElementSaveButton = popupAdd.querySelector(".popup__save-button");
 const popupAddForm = popupAdd.querySelector(".popup__form");
 
 const popupImage = document.querySelector(".popup_type_img");
@@ -74,6 +75,9 @@ function addNewPlace(event) {
   pictureContainer.prepend(createCard(popupAddFormElementTitle.value, popupAddFormElementLink.value));
   closePopup(popupAdd);
   popupAddForm.reset();
+  popupAddFormElementSaveButton.setAttribute("disabled", "disabled");
+  popupAddFormElementSaveButton.classList.add("popup__save-button_inactive");
+  /*Возврат кнопки к начальному состоянию после добавления нового места*/
 }
 
 function openPopup(popupElement) {
@@ -116,7 +120,7 @@ const openProfileEditor = () => {
   popupEditFormElementName.dispatchEvent(new Event("input"));
   popupEditFormElementAbout.dispatchEvent(new Event("input"));
   /*dispatchEvent нужен для имитации события input, а следовательно
-  запуска checkInputValidity и toggleButtonState из validate.js в том случае,
+  запуска checkInputValidity и toggleButtonState из validate в том случае,
   если была стёрта строка имени либо описания и попап был закрыт. При следующем
   открытии попапа поля будут снова заполены данными профиля, но без события input
   валидатор посчитает это как за пустое поле на предыдущем шаге и будут высвечены ошибки,
