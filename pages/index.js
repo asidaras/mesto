@@ -1,9 +1,12 @@
-import Card from "../scripts/Card.js";
-import FormValidator from "../scripts/FormValidator.js";
+import Card from "../components/Card.js";
+import FormValidator from "../components/FormValidator.js";
+import Section from "../components/Section.js";
+import UserInfo from "../components/UserInfo.js"
+import {
+  initialCards
+} from '../utils/constants.js';
 
 const profile = document.querySelector(".profile");
-const profileName = profile.querySelector(".profile__name");
-const profileAbout = profile.querySelector(".profile__about");
 const profileEditButton = profile.querySelector(".profile__edit-button");
 const profileAddButton = profile.querySelector(".profile__add-button");
 
@@ -23,41 +26,6 @@ const popupImage = document.querySelector(".popup_type_img");
 const popupImageImg = popupImage.querySelector(".popup__image");
 const popupImageFigCaption = popupImage.querySelector(".popup__figcaption");
 
-const pictureContainer = document.querySelector(".elements");
-
-const initialCards = [
-  {
-    name: "Архыз",
-    link:
-      "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/arkhyz.jpg",
-  },
-  {
-    name: "Челябинская область",
-    link:
-      "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/chelyabinsk-oblast.jpg",
-  },
-  {
-    name: "Иваново",
-    link:
-      "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/ivanovo.jpg",
-  },
-  {
-    name: "Камчатка",
-    link:
-      "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kamchatka.jpg",
-  },
-  {
-    name: "Холмогорский район",
-    link:
-      "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/kholmogorsky-rayon.jpg",
-  },
-  {
-    name: "Байкал",
-    link:
-      "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
-  },
-];
-
 function createCard(name, title){
   const card = new Card(name, title, openPicture, "#picture-template");
   return card.createCard();
@@ -65,14 +33,24 @@ function createCard(name, title){
 
 function saveChangesInProfile(event) {
   event.preventDefault();
-  profileName.textContent = popupEditFormElementName.value;
-  profileAbout.textContent = popupEditFormElementAbout.value;
+  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"});
+  userInfo.setUserInfo({
+    newName: popupEditFormElementName.value, 
+    newAbout: popupEditFormElementAbout.value});
   closePopup(popupEdit);
 }
 
 function addNewPlace(event) {
   event.preventDefault();
-  pictureContainer.prepend(createCard(popupAddFormElementTitle.value, popupAddFormElementLink.value));
+
+  const place = new Section({items: [{name: popupAddFormElementTitle.value, link: popupAddFormElementLink.value}], 
+    renderer: (item) => {
+      place.addItem(
+        createCard(item.name, item.link), false);
+    }
+  }, ".elements");
+
+  place.renderItems();
   closePopup(popupAdd);
   popupAddForm.reset();
   popupAddFormElementSaveButton.setAttribute("disabled", "disabled");
@@ -115,8 +93,9 @@ function setEventListenersForClosePopup() {
 }
 
 const openProfileEditor = () => {
-  popupEditFormElementName.value = profileName.textContent;
-  popupEditFormElementAbout.value = profileAbout.textContent;
+  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"});
+  popupEditFormElementName.value = userInfo.getUserInfo().profileName;
+  popupEditFormElementAbout.value = userInfo.getUserInfo().profileAbout;
   popupEditFormElementName.dispatchEvent(new Event("input"));
   popupEditFormElementAbout.dispatchEvent(new Event("input"));
   /*dispatchEvent нужен для имитации события input, а следовательно
@@ -130,9 +109,14 @@ const openProfileEditor = () => {
 };
 const openPlaceEditor = () => openPopup(popupAdd);
 
-initialCards.forEach((item) => {
-  pictureContainer.append(createCard(item.name, item.link));
-});
+const initalPlaces = new Section({items: initialCards, 
+  renderer: (item) => {
+    initalPlaces.addItem(
+      createCard(item.name, item.link));
+  }
+}, ".elements");
+
+initalPlaces.renderItems();
 
 const popupFormsList = Array.from(document.querySelectorAll(".popup__form"));
 popupFormsList.forEach((popupForm) => {
