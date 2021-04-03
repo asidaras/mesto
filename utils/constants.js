@@ -30,3 +30,6 @@ export const initialCards = [
       "https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg",
   },
 ];
+export const profile = document.querySelector(".profile");
+export const profileEditButton = profile.querySelector(".profile__edit-button");
+export const profileAddButton = profile.querySelector(".profile__add-button");

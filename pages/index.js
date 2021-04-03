@@ -5,122 +5,66 @@ import UserInfo from "../components/UserInfo.js"
 import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js";
 import {
-  initialCards
+  initialCards,
+  profileEditButton,
+  profileAddButton
 } from '../utils/constants.js';
 
-const popupWidthImage = new PopupWithImage(".popup_type_img");
+const popupWidthImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
 
-const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => {
+const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //создание экземпляра класса формы изменения данных профиля
   event.preventDefault();
-  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"});
-  userInfo.setUserInfo({
-    newName: popupWithFormEdit._getInputValues().firstField, 
-    newAbout: popupWithFormEdit._getInputValues().secondField});
-  popupWithFormEdit.close();
+  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
+
+  const {firstValue, secondValue} = popupWithFormEdit.getValues() //получение данных из формы ввода
+  userInfo.setUserInfo({ //присвоение новых данных
+    newName: firstValue, 
+    newAbout: secondValue});
+  popupWithFormEdit.close(); //закрытие попапа изменения данных профиля
 });
 
-const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => {
+const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //создание экземпляра класса формы добавления нового места
   event.preventDefault();
+  const {firstValue, secondValue} = popupWithFormAdd.getValues() //получение данных из формы ввода
 
-  const place = new Section({items: [{name: popupWithFormAdd._getInputValues().firstField, link: popupWithFormAdd._getInputValues().secondField}], 
+  const place = new Section({items: [{name: firstValue, link: secondValue}], //добавление нового места
     renderer: (item) => {
       place.addItem(
         createCard(item.name, item.link), false);
     }
   }, ".elements");
 
-  place.renderItems();
-  popupWithFormAdd.close();
+  place.renderItems(); //отображение изменений
+  popupWithFormAdd.close(); //закрытие попапа добавления нового места
+  popupWithFormAdd.returnButtonToInitalState(); // возврат кнопки в исходное состояние (неактивная прозрачная)
 });
 
+//установка слушателей событий
 popupWidthImage.setEventListeners();
 popupWithFormEdit.setEventListeners();
 popupWithFormAdd.setEventListeners();
 
-const profile = document.querySelector(".profile");
-const profileEditButton = profile.querySelector(".profile__edit-button");
-const profileAddButton = profile.querySelector(".profile__add-button");
-
-const popupEdit = document.querySelector(".popup_type_edit");
-const popupEditFormElementName = popupEdit.querySelector(".popup__input_first");
-const popupEditFormElementAbout = popupEdit.querySelector(".popup__input_second");
-const popupEditForm = popupEdit.querySelector(".popup__form");
-
-const popupAdd = document.querySelector(".popup_type_add");
-const popupAddFormElementTitle = popupAdd.querySelector(".popup__input_first");
-const popupAddFormElementLink = popupAdd.querySelector(".popup__input_second");
-const popupAddFormElementSaveButton = popupAdd.querySelector(".popup__save-button");
-const popupAddForm = popupAdd.querySelector(".popup__form");
-
-function createCard(name, title){
+function createCard(name, title){ 
   const card = new Card(name, title, openPicture, "#picture-template");
   return card.createCard();
 }
 
-function saveChangesInProfile(event) {
-  event.preventDefault();
-  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"});
-  userInfo.setUserInfo({
-    newName: popupEditFormElementName.value, 
-    newAbout: popupEditFormElementAbout.value});
-  closePopup(popupEdit);
-}
-
-function addNewPlace(event) {
-  event.preventDefault();
-
-  const place = new Section({items: [{name: popupAddFormElementTitle.value, link: popupAddFormElementLink.value}], 
-    renderer: (item) => {
-      place.addItem(
-        createCard(item.name, item.link), false);
-    }
-  }, ".elements");
-
-  place.renderItems();
-  closePopup(popupAdd);
-  popupAddForm.reset();
-  popupAddFormElementSaveButton.setAttribute("disabled", "disabled");
-  popupAddFormElementSaveButton.classList.add("popup__save-button_inactive");
-  /*Возврат кнопки к начальному состоянию после добавления нового места*/
-}
-
-function openPopup(popupElement) {
-  popupElement.classList.add("popup_opened");
-  document.addEventListener("keydown", closeAnyPopupOnEscapeKeydown); //установка слушателя закрытие popup на Esc
-}
-
-function closePopup(popupElement) {
-  popupElement.classList.remove("popup_opened");
-  document.removeEventListener("keydown", closeAnyPopupOnEscapeKeydown); //снятие слушателя закрытие popup на Esc
-}
-
-function closeAnyPopupOnEscapeKeydown(event) {
-  const openedPopup = document.querySelector(".popup_opened");
-  if (event.key === "Escape" && openedPopup != null) 
-    closePopup(openedPopup);
-}
-
-function openPicture(event) {
+function openPicture(event) { //колбэк функция открытия большой картинки
   popupWidthImage.open(event.target.src, event.target.alt);
 }
 
 const openProfileEditor = () => {
   const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"});
-  popupEditFormElementName.value = userInfo.getUserInfo().profileName;
-  popupEditFormElementAbout.value = userInfo.getUserInfo().profileAbout;
-  popupEditFormElementName.dispatchEvent(new Event("input"));
-  popupEditFormElementAbout.dispatchEvent(new Event("input"));
-  /*dispatchEvent нужен для имитации события input, а следовательно
-  запуска checkInputValidity и toggleButtonState из validate в том случае,
-  если была стёрта строка имени либо описания и попап был закрыт. При следующем
-  открытии попапа поля будут снова заполены данными профиля, но без события input
-  валидатор посчитает это как за пустое поле на предыдущем шаге и будут высвечены ошибки,
-  заблокирована кнопка до тех пор, по не будет произведён ввод каких-либо значений
-  с клавиатуры, либо стирание символа.*/
-  return openPopup(popupEdit);
+  popupWithFormEdit.setInputValues({
+    firstValue: userInfo.getUserInfo().profileName,
+    secondValue: userInfo.getUserInfo().profileAbout
+  });
+  popupWithFormEdit.dispatchInput();
+  popupWithFormEdit.open();
 };
 const openPlaceEditor = () => popupWithFormAdd.open();
 
+//инициалицая начальными карточками
 const initalPlaces = new Section({items: initialCards, 
   renderer: (item) => {
     initalPlaces.addItem(
@@ -130,6 +74,7 @@ const initalPlaces = new Section({items: initialCards,
 
 initalPlaces.renderItems();
 
+//включение валидации
 const popupFormsList = Array.from(document.querySelectorAll(".popup__form"));
 popupFormsList.forEach((popupForm) => {
   const validator = new FormValidator(
