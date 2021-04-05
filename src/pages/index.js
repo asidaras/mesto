@@ -11,33 +11,27 @@ import {
   profileAddButton
 } from '../utils/constants.js';
 
+const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
+
 const popupWidthImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
 
 const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //создание экземпляра класса формы изменения данных профиля
   event.preventDefault();
-  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
 
-  const {firstValue, secondValue} = popupWithFormEdit.getValues() //получение данных из формы ввода
+  const {name, about} = popupWithFormEdit.getValues() //получение данных из формы ввода
   userInfo.setUserInfo({ //присвоение новых данных
-    newName: firstValue, 
-    newAbout: secondValue});
+    newName: name, 
+    newAbout: about});
   popupWithFormEdit.close(); //закрытие попапа изменения данных профиля
 });
 
 const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //создание экземпляра класса формы добавления нового места
   event.preventDefault();
-  const {firstValue, secondValue} = popupWithFormAdd.getValues() //получение данных из формы ввода
+  const {title, link} = popupWithFormAdd.getValues() //получение данных из формы ввода
 
-  const place = new Section({items: [{name: firstValue, link: secondValue}], //добавление нового места
-    renderer: (item) => {
-      place.addItem(
-        createCard(item.name, item.link), false);
-    }
-  }, ".elements");
+  places.addItem(createCard(title, link), false);
 
-  place.renderItems(); //отображение изменений
   popupWithFormAdd.close(); //закрытие попапа добавления нового места
-  popupWithFormAdd.returnButtonToInitalState(); // возврат кнопки в исходное состояние (неактивная прозрачная)
 });
 
 //установка слушателей событий
@@ -55,25 +49,23 @@ function openPicture(event) { //колбэк функция открытия б�
 }
 
 const openProfileEditor = () => {
-  const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"});
   popupWithFormEdit.setInputValues({
-    firstValue: userInfo.getUserInfo().profileName,
-    secondValue: userInfo.getUserInfo().profileAbout
+    name: userInfo.getUserInfo().profileName,
+    about: userInfo.getUserInfo().profileAbout
   });
-  popupWithFormEdit.dispatchInput();
   popupWithFormEdit.open();
 };
 const openPlaceEditor = () => popupWithFormAdd.open();
 
 //инициалицая начальными карточками
-const initalPlaces = new Section({items: initialCards, 
+const places = new Section({items: initialCards, 
   renderer: (item) => {
-    initalPlaces.addItem(
+    places.addItem(
       createCard(item.name, item.link));
   }
 }, ".elements");
 
-initalPlaces.renderItems();
+places.renderItems();
 
 //включение валидации
 const popupFormsList = Array.from(document.querySelectorAll(".popup__form"));
