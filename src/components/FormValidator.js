@@ -55,8 +55,15 @@ export default class FormValidator {
 
   _setEventListeners(){
     const popupInputsList = Array.from(this._form.querySelectorAll(this._inputSelector));
-    const popupFormButton =  this._form.querySelector(this._submitButtonSelector);
-  
+    const popupFormButton = this._form.querySelector(this._submitButtonSelector);
+
+    this._form.addEventListener("reset", () => {
+      popupInputsList.forEach((popupInput) => {
+        this._hideInputError(popupInput); 
+        this._toggleButtonState(popupInputsList, popupFormButton);
+      });
+    });
+
     this._toggleButtonState(popupInputsList, popupFormButton);
   
     popupInputsList.forEach((popupInput) => {
