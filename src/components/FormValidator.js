@@ -43,6 +43,11 @@ export default class FormValidator {
     }); 
   }
 
+  _disableButton(popupFormButton) {
+    popupFormButton.classList.add(this._inactiveButtonClass);
+    popupFormButton.setAttribute("disabled", "disabled");
+  }
+
   _toggleButtonState(popupInputsList, popupFormButton){
     if (this._hasInvalidInput(popupInputsList)) {
       popupFormButton.classList.add(this._inactiveButtonClass);
@@ -60,7 +65,7 @@ export default class FormValidator {
     this._form.addEventListener("reset", () => {
       popupInputsList.forEach((popupInput) => {
         this._hideInputError(popupInput); 
-        this._toggleButtonState(popupInputsList, popupFormButton);
+        this._disableButton(popupFormButton);
       });
     });
 
