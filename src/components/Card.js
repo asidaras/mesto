@@ -1,8 +1,9 @@
 export default class Card {
-  constructor(name, link, handleCardClick, templateSelector) {
+  constructor(name, link, handleCardClick, handleDeletePicture, templateSelector) {
     this._name = name;
     this._link = link;
     this._handleCardClick = handleCardClick;
+    this._handleDeletePicture = handleDeletePicture;
     this._templateSelector = templateSelector;
   }
 
@@ -23,10 +24,6 @@ export default class Card {
       .classList.toggle("elements__like_active");
   }
 
-  _deletePicture() {
-    this._pictureElement.remove();
-  }
-
   _setEventListeners() {
     this._pictureElement
       .querySelector(".elements__like")
@@ -35,16 +32,19 @@ export default class Card {
       });
     this._pictureElement
       .querySelector(".elements__remove")
-      .addEventListener("click", () => {
-        this._deletePicture();
-      });
+      .addEventListener("click", this._handleDeletePicture);
     this._pictureElement
       .querySelector(".elements__image-container")
       .addEventListener("click", this._handleCardClick);
   }
 
-  createCard() {
+  createCard(my=false) {
     this._pictureElement = this._getPictureTemplate();
+    if (my){
+      const removeElement = this._pictureElement.querySelector(".elements__remove");
+      removeElement.classList.add("elemenst__remove_type_active");
+      removeElement.removeAttribute("disabled");
+    }
     this._setEventListeners();
     const pictureElementImage = this._getPictureElementImage();
     pictureElementImage.src = this._link;

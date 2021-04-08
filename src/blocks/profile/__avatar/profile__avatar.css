@@ -6,6 +6,12 @@
   border-radius: 60px;
   object-fit: contain;
   justify-self: start;
+  opacity: 1;
+  transition: opacity 0.5s ease;
+}
+.profile__avatar:hover{
+  cursor: pointer;
+  opacity: 0.25;
 }
 @media screen and (max-width: 940px) {
   .profile__avatar{

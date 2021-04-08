@@ -5,6 +5,7 @@ import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js"
 import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js";
+import PopupWithConfirm from "../components/PopupWithConfirm.js"
 import {
   initialCards,
   profileEditButton,
@@ -14,6 +15,12 @@ import {
 const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
 
 const popupWidthImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
+
+const popupWidthConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (event) => {
+  event.preventDefault();
+  places.removeItem(popupWidthConfirm.getCardToRemove());
+  popupWidthConfirm.close();
+}); //создание экземпляра класса попапа подтверждения удаления
 
 const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //создание экземпляра класса формы изменения данных профиля
   event.preventDefault();
@@ -29,7 +36,7 @@ const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //с�
   event.preventDefault();
   const {title, link} = popupWithFormAdd.getValues() //получение данных из формы ввода
 
-  places.addItem(createCard(title, link), false);
+  places.addItem(createCard(title, link, true), false);
 
   popupWithFormAdd.close(); //закрытие попапа добавления нового места
 });
@@ -38,14 +45,19 @@ const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //с�
 popupWidthImage.setEventListeners();
 popupWithFormEdit.setEventListeners();
 popupWithFormAdd.setEventListeners();
+popupWidthConfirm.setEventListeners();
 
-function createCard(name, title){ 
-  const card = new Card(name, title, openPicture, "#picture-template");
-  return card.createCard();
+function createCard(name, title, my=false){ 
+  const card = new Card(name, title, openPicture, deletePicture, "#picture-template");
+  return card.createCard(my);
 }
 
 function openPicture(event) { //колбэк функция открытия большой картинки
   popupWidthImage.open(event.target.src, event.target.alt);
+}
+
+function deletePicture(event){
+  popupWidthConfirm.open(event.target.parentNode);
 }
 
 const openProfileEditor = () => {
@@ -73,8 +85,8 @@ popupFormsList.forEach((popupForm) => {
   const validator = new FormValidator(
     {
       inputSelector: ".popup__input",
-      submitButtonSelector: ".popup__save-button",
-      inactiveButtonClass: "popup__save-button_inactive",
+      submitButtonSelector: ".popup__submit-button",
+      inactiveButtonClass: "popup__submit-button_inactive",
       inputErrorClass: "popup__input_type_error",
       errorClass: "popup__input-error_active",
     },
