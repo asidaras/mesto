@@ -13,7 +13,11 @@
     </header>
     <main>
       <section class="profile">
-        <img class="profile__avatar" src="<%=require("./images/profile/Avatar.png")%>" alt="Фото профиля">
+        <button class="profile__avatar-button" type="button">
+          <div class="profile__avatar-overlay"></div>
+          <img class="profile__avatar" src="<%=require("./images/profile/Avatar.png")%>" alt="Фото профиля">
+          <!--<%=require("./images/profile/Avatar.png")%>-->
+        </button>
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button class="profile__edit-button" type="button"></button>
@@ -67,6 +71,17 @@
         <h2 class="popup__title">Вы уверены?</h2>
         <form class="popup__form" name="delete-confirm" novalidate>
           <button class="popup__submit-button" type="submit">Да</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
+    </section>
+    <section class="popup popup_type_change-avatar">
+      <div class="popup__container">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form class="popup__form" name="change_avatar" novalidate>
+          <input class="popup__input popup__input_first" id="avatar-input" type="url" name="avatar" value="" placeholder="Ссылка на аватар" required>
+          <span class="popup__input-error avatar-input-error"></span>
+          <button class="popup__submit-button" type="submit">Сохранить</button>
         </form>
         <button class="popup__close-button" type="button"></button>
       </div>

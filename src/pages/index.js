@@ -3,23 +3,37 @@ import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
 import UserInfo from "../components/UserInfo.js"
+import UserAvatar from "../components/UserAvatar.js"
 import PopupWithImage from "../components/PopupWithImage.js"
 import PopupWithForm from "../components/PopupWithForm.js";
 import PopupWithConfirm from "../components/PopupWithConfirm.js"
+import PopupWithAvatar from "../components/PopupWithAvatar.js"
 import {
   initialCards,
   profileEditButton,
-  profileAddButton
+  profileAddButton,
+  profileAvatarButton
 } from '../utils/constants.js';
 
 const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
 
-const popupWidthImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
+const userAvatar = new UserAvatar({avatar: ".profile__avatar"});
 
-const popupWidthConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (event) => {
+const popupWithImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
+
+const popupWithAvatar = new PopupWithAvatar(".popup_type_change-avatar", (event) => {
   event.preventDefault();
-  places.removeItem(popupWidthConfirm.getCardToRemove());
-  popupWidthConfirm.close();
+
+  const {avatar} = popupWithAvatar.getValues();
+  userAvatar.setUserAvatar({
+    newAvatar: avatar});
+  popupWithAvatar.close();
+});
+
+const popupWithConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (event) => {
+  event.preventDefault();
+  places.removeItem(popupWithConfirm.getCardToRemove());
+  popupWithConfirm.close();
 }); //создание экземпляра класса попапа подтверждения удаления
 
 const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //создание экземпляра класса формы изменения данных профиля
@@ -42,10 +56,11 @@ const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //с�
 });
 
 //установка слушателей событий
-popupWidthImage.setEventListeners();
+popupWithImage.setEventListeners();
 popupWithFormEdit.setEventListeners();
 popupWithFormAdd.setEventListeners();
-popupWidthConfirm.setEventListeners();
+popupWithConfirm.setEventListeners();
+popupWithAvatar.setEventListeners();
 
 function createCard(name, title, my=false){ 
   const card = new Card(name, title, openPicture, deletePicture, "#picture-template");
@@ -53,12 +68,20 @@ function createCard(name, title, my=false){
 }
 
 function openPicture(event) { //колбэк функция открытия большой картинки
-  popupWidthImage.open(event.target.src, event.target.alt);
+  popupWithImage.open(event.target.src, event.target.alt);
 }
 
 function deletePicture(event){
-  popupWidthConfirm.open(event.target.parentNode);
+  popupWithConfirm.open(event.target.parentNode);
 }
+
+
+const openAvatarEditor = () => {
+  popupWithAvatar.setInputValues({
+    avatar: userAvatar.getUserAvatar().profileAvatar
+  });
+  popupWithAvatar.open();
+};
 
 const openProfileEditor = () => {
   popupWithFormEdit.setInputValues({
@@ -67,6 +90,7 @@ const openProfileEditor = () => {
   });
   popupWithFormEdit.open();
 };
+
 const openPlaceEditor = () => popupWithFormAdd.open();
 
 //инициалицая начальными карточками
@@ -97,3 +121,4 @@ popupFormsList.forEach((popupForm) => {
 
 profileAddButton.addEventListener("click", openPlaceEditor);
 profileEditButton.addEventListener("click", openProfileEditor);
+profileAvatarButton.addEventListener("click", openAvatarEditor);
