@@ -1,4 +1,5 @@
 import "./index.css";
+import Api from "../components/Api.js"
 import Card from "../components/Card.js";
 import FormValidator from "../components/FormValidator.js";
 import Section from "../components/Section.js";
@@ -14,6 +15,10 @@ import {
   profileAddButton,
   profileAvatarButton
 } from '../utils/constants.js';
+
+const api = new Api({server: "https://mesto.nomoreparties.co", token: "353f5b3a-f1c1-4e51-8411-778e0e42b67e", cohort: "cohort-22"});
+api.getUserInfo();
+api.getInitialCards();
 
 const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
 
