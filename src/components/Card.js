@@ -38,8 +38,17 @@ export default class Card {
       .addEventListener("click", this._handleCardClick);
   }
 
+  setCardId(id){
+    this._id = id;
+  }
+
+  getCardId(){
+    return this._id;
+  }
+
   createCard(my=false) {
     this._pictureElement = this._getPictureTemplate();
+    this._pictureElement.setAttribute("id", this.getCardId());
     if (my){
       const removeElement = this._pictureElement.querySelector(".elements__remove");
       removeElement.classList.add("elemenst__remove_type_active");

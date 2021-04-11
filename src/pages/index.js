@@ -10,20 +10,15 @@ import PopupWithForm from "../components/PopupWithForm.js";
 import PopupWithConfirm from "../components/PopupWithConfirm.js"
 import PopupWithAvatar from "../components/PopupWithAvatar.js"
 import {
-  initialCards,
   profileEditButton,
   profileAddButton,
   profileAvatarButton
 } from '../utils/constants.js';
 
+let places; //Список карточек с местами
 const api = new Api({server: "https://mesto.nomoreparties.co", token: "353f5b3a-f1c1-4e51-8411-778e0e42b67e", cohort: "cohort-22"});
-api.getUserInfo();
-api.getInitialCards();
-
 const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
-
 const userAvatar = new UserAvatar({avatar: ".profile__avatar"});
-
 const popupWithImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
 
 const popupWithAvatar = new PopupWithAvatar(".popup_type_change-avatar", (event) => {
@@ -35,11 +30,13 @@ const popupWithAvatar = new PopupWithAvatar(".popup_type_change-avatar", (event)
   popupWithAvatar.close();
 });
 
-const popupWithConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (event) => {
+const popupWithConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (event) => { //создание экземпляра класса попапа подтверждения удаления
   event.preventDefault();
   places.removeItem(popupWithConfirm.getCardToRemove());
+  console.log(places._items);
+  //api.removeCard()
   popupWithConfirm.close();
-}); //создание экземпляра класса попапа подтверждения удаления
+});
 
 const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //создание экземпляра класса формы изменения данных профиля
   event.preventDefault();
@@ -47,7 +44,20 @@ const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //�
   const {name, about} = popupWithFormEdit.getValues() //получение данных из формы ввода
   userInfo.setUserInfo({ //присвоение новых данных
     newName: name, 
-    newAbout: about});
+    newAbout: about
+  });
+  
+  api.setUserInfo({ //отправка новых данных на сервер
+    newName: name, 
+    newAbout: about
+  })
+  .then((result) => {
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+
   popupWithFormEdit.close(); //закрытие попапа изменения данных профиля
 });
 
@@ -55,7 +65,17 @@ const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //с�
   event.preventDefault();
   const {title, link} = popupWithFormAdd.getValues() //получение данных из формы ввода
 
-  places.addItem(createCard(title, link, true), false);
+  api.createNewCard({
+    newTitle: title,
+    newLink: link
+  })
+  .then((result) => {
+    places.addItem(createCard(result._id, title, link, true), false);
+    console.log(result);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
 
   popupWithFormAdd.close(); //закрытие попапа добавления нового места
 });
@@ -67,8 +87,9 @@ popupWithFormAdd.setEventListeners();
 popupWithConfirm.setEventListeners();
 popupWithAvatar.setEventListeners();
 
-function createCard(name, title, my=false){ 
+function createCard(id, name, title, my=false){ 
   const card = new Card(name, title, openPicture, deletePicture, "#picture-template");
+  card.setCardId(id);
   return card.createCard(my);
 }
 
@@ -80,6 +101,41 @@ function deletePicture(event){
   popupWithConfirm.open(event.target.parentNode);
 }
 
+function renderUserInfoFromServer(){
+  api.getUserInfo()
+  .then((result) => {
+    userInfo.setUserInfo({
+      newName: result.name,
+      newAbout: result.about
+    });
+    userInfo.setUserId(result._id);
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
+
+function renderInitalCardsFromServer(){
+  api.getInitialCards()
+  .then((result) => {
+    places = new Section({items: result, 
+      renderer: (item) => {
+        if (item.owner._id === userInfo.getUserId()){
+          places.addItem(
+            createCard(item._id, item.name, item.link, true));
+        }
+        else{
+          places.addItem(
+            createCard(item._id, item.name, item.link));
+        }
+      }
+    }, ".elements");
+    places.renderItems();
+  })
+  .catch((error) => {
+    console.log(error);
+  });
+}
 
 const openAvatarEditor = () => {
   popupWithAvatar.setInputValues({
@@ -98,15 +154,8 @@ const openProfileEditor = () => {
 
 const openPlaceEditor = () => popupWithFormAdd.open();
 
-//инициалицая начальными карточками
-const places = new Section({items: initialCards, 
-  renderer: (item) => {
-    places.addItem(
-      createCard(item.name, item.link));
-  }
-}, ".elements");
-
-places.renderItems();
+renderUserInfoFromServer(); //инициалицая имени и описания данными от сервера
+renderInitalCardsFromServer(); //инициалицая начальными карточками
 
 //включение валидации
 const popupFormsList = Array.from(document.querySelectorAll(".popup__form"));

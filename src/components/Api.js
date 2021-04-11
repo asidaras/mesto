@@ -4,11 +4,13 @@ export default class Api {
     this._token = token;
     this._cohort = cohort;
     this._url = this._server + "/v1/" + this._cohort;
+    this._userStr = "/users/me";
+    this._cardStr = "/cards";
+    this._contentType = "application/json";
   }
 
   getUserInfo() {
-    const userStr = "/users/me";
-    fetch(this._url + userStr, {
+    return fetch(this._url + this._userStr, {
       headers: {
         authorization: this._token
       }
@@ -17,34 +19,82 @@ export default class Api {
       if (res.ok) {
         return res.json();
       }
-     return Promise.reject(`Ошибка: ${res.status}`);
+      
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+  }
+
+  setUserInfo({newName, newAbout}){
+    return fetch(this._url + this._userStr, {
+      method: "PATCH",
+      headers: {
+        authorization: this._token,
+        "Content-Type": this._contentType
+      },
+      body: JSON.stringify({
+        name: newName,
+        about: newAbout
+      })
     })
-    .then((result) => {
-      console.log(result);
-    })
-    .catch((err) => {
-        console.log(err);
-    }); 
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
   }
 
   getInitialCards() {
-    const cardStr = "/cards";
-    fetch(this._url + cardStr, {
-        headers: {
-          authorization: this._token
-        }
+    return fetch(this._url + this._cardStr, {
+      headers: {
+        authorization: this._token
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+  }
+
+  createNewCard({newTitle, newLink}){
+    return fetch(this._url + this._cardStr, {
+      method: "POST",
+      headers: {
+        authorization: this._token,
+        "Content-Type": this._contentType
+      },
+      body: JSON.stringify({
+        name: newTitle,
+        link: newLink
       })
-      .then(res => {
-        if (res.ok) {
-          return res.json();
-        }
-       return Promise.reject(`Ошибка: ${res.status}`);
-      })
-      .then((result) => {
-        console.log(result);
-      })
-      .catch((err) => {
-          console.log(err);
-      }); 
-    }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+  }
+
+  removeCard(cardId){
+    return fetch(this._url + cardId, {
+      method: "DELETE",
+      headers: {
+        authorization: this._token,
+      }
+    })
+    .then(res => {
+      if (res.ok) {
+        return res.json();
+      }
+      
+      return Promise.reject(`Ошибка: ${res.status}`);
+    });
+  }
+
 }
