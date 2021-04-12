@@ -23,35 +23,35 @@ const popupWithImage = new PopupWithImage(".popup_type_img"); //создание
 
 const popupWithAvatar = new PopupWithAvatar(".popup_type_change-avatar", (event) => {
   event.preventDefault();
-
   const {avatar} = popupWithAvatar.getValues();
-  console.log(avatar);
   
+  renderLoading("Сохранить", popupWithAvatar, true);
   api.updateAvatar(avatar)
-  .then((result) => {
+  .then(() => {
     userAvatar.setUserAvatar(
     {
       newAvatar: avatar
     });
-    console.log(result);
   })
   .catch((error) => {
-    console.log(error);
+    alert(error);
+  })
+  .finally(() => {
+    renderLoading("Сохранить", popupWithAvatar, false);
+    popupWithAvatar.close();
   });
-
-  popupWithAvatar.close();
 });
 
 const popupWithConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (event) => { //создание экземпляра класса попапа подтверждения удаления
   event.preventDefault();
   const cardToRemove = popupWithConfirm.getCardToRemove();
+
   api.removeCard(cardToRemove.id)
-  .then((result) => {
+  .then(() => {
     places.removeItem(cardToRemove);
-    console.log(result);
   })
   .catch((error) => {
-    console.log(error);
+    alert(error);
   });
   popupWithConfirm.close();
 });
@@ -61,29 +61,32 @@ const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //�
 
   const {name, about} = popupWithFormEdit.getValues() //получение данных из формы ввода
   
+  renderLoading("Сохранить", popupWithFormEdit, true);
   api.setUserInfo({ //отправка новых данных на сервер
     newName: name, 
     newAbout: about
   })
-  .then((result) => {
+  .then(() => {
     userInfo.setUserInfo(
     {
       newName: name, 
       newAbout: about
     });
-    console.log(result);
   })
   .catch((error) => {
-    console.log(error);
+    alert(error);
+  })
+  .finally(() => {
+    renderLoading("Сохранить", popupWithFormEdit, false);
+    popupWithFormEdit.close();
   });
-
-  popupWithFormEdit.close(); //закрытие попапа изменения данных профиля
 });
 
 const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //создание экземпляра класса формы добавления нового места
   event.preventDefault();
   const {title, link} = popupWithFormAdd.getValues() //получение данных из формы ввода
 
+  renderLoading("Создать", popupWithFormAdd, true);
   api.createNewCard(
   {
     newTitle: title,
@@ -99,13 +102,14 @@ const popupWithFormAdd = new PopupWithForm(".popup_type_add", (event) => { //с�
       isMy: true,
       likes: result.likes
     }), false);
-    console.log(result);
   })
   .catch((error) => {
-    console.log(error);
+    alert(error);
+  })
+  .finally(() => {
+    renderLoading("Создать", popupWithFormAdd, false);
+    popupWithFormAdd.close();
   });
-
-  popupWithFormAdd.close(); //закрытие попапа добавления нового места
 });
 
 //установка слушателей событий
@@ -114,6 +118,15 @@ popupWithFormEdit.setEventListeners();
 popupWithFormAdd.setEventListeners();
 popupWithConfirm.setEventListeners();
 popupWithAvatar.setEventListeners();
+
+function renderLoading(buttonInitalMessage, popup, isLoading){
+  if(isLoading){
+    popup.savingStateToggle(buttonInitalMessage, true);
+  }
+  else{
+    popup.savingStateToggle(buttonInitalMessage, false);
+  }
+}
 
 function createCard({id, userId, name, title, isMy, likes}){ 
   const card = new Card(
@@ -147,7 +160,7 @@ function likeAndDislikePicture(event){
       likeCount.innerText = result.likes.length;
     })
     .catch((error) => {
-      console.log(error);
+      alert(error);
     });
   }
   else{
@@ -157,7 +170,7 @@ function likeAndDislikePicture(event){
       likeCount.innerText = result.likes.length;
     })
     .catch((error) => {
-      console.log(error);
+      alert(error);
     });
   }
 }
@@ -179,9 +192,13 @@ function renderUserInfoFromServer(){
       newAbout: result.about
     });
     userInfo.setUserId(result._id);
+    userAvatar.setUserAvatar(
+      {
+        newAvatar: result.avatar
+      });
   })
   .catch((error) => {
-    console.log(error);
+    alert(error);
   });
 }
 
@@ -219,7 +236,7 @@ function renderInitalCardsFromServer(){
     places.renderItems();
   })
   .catch((error) => {
-    console.log(error);
+    alert(error);
   });
 }
 
@@ -244,7 +261,6 @@ const openPlaceEditor = () => popupWithFormAdd.open();
 
 renderUserInfoFromServer(); //инициалицая имени и описания данными от сервера
 renderInitalCardsFromServer(); //инициалицая начальными карточками
-
 
 //включение валидации
 const popupFormsList = Array.from(document.querySelectorAll(".popup__form"));

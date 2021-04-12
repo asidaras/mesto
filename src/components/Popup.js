@@ -9,6 +9,16 @@ export default class Popup{
       this.close();
   }
 
+  savingStateToggle(buttonInitalMessage, save){
+    const submitButton = this._popup.querySelector(".popup__submit-button");
+    if (save){
+      submitButton.textContent = "Сохранение...";
+    }
+    else{
+      submitButton.textContent = buttonInitalMessage;
+    }
+  }
+
   setEventListeners(){
     this._popup.addEventListener("click", (event) => {
       if (event.target.classList.contains("popup_opened") || event.target.classList.contains("popup__close-button")) 

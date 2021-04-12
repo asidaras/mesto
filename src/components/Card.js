@@ -43,7 +43,7 @@ export default class Card {
 
   createCard({id, isMy=false, likes, userId}) {
     this._pictureElement = this._getPictureTemplate();
-    this._pictureElement.setAttribute("id", id);
+    this._pictureElement.setAttribute("id", id); //установка id элементов в вёрстку
     this._id = id;
     if (isMy){
       const removeElement = this._pictureElement.querySelector(".elements__remove");
@@ -58,7 +58,7 @@ export default class Card {
 
     const pictureLikeCounter = this._pictureElement.querySelector(".elements__like-counter");
 
-    likes.forEach(user => {
+    likes.forEach(user => { //установка лайков для тех карточек, которые лайкнуты
       for (let key in user){
         if (key != "_id"){
           continue;
@@ -70,7 +70,7 @@ export default class Card {
       }
     });
 
-    pictureLikeCounter.textContent = likes.length;
+    pictureLikeCounter.textContent = likes.length; //счётчик лайков
 
     return this._pictureElement;
   }
