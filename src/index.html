@@ -13,7 +13,10 @@
     </header>
     <main>
       <section class="profile">
-        <img class="profile__avatar" src="<%=require("./images/profile/Avatar.png")%>" alt="Фото профиля">
+        <button class="profile__avatar-button" type="button">
+          <div class="profile__avatar-overlay"></div>
+          <img class="profile__avatar" src="<%=require("./images/profile/Avatar.png")%>" alt="Фото профиля">
+        </button>
         <div class="profile__info">
           <h1 class="profile__name">Жак-Ив Кусто</h1>
           <button class="profile__edit-button" type="button"></button>
@@ -25,7 +28,7 @@
       </section>
     </main>
     <footer class="footer">
-      <p class="footer__text">&#169; 2020 Mesto Russia</p>
+      <p class="footer__text">&#169; 2021 Mesto Russia</p>
     </footer>
     <section class="popup popup_type_edit">
       <div class="popup__container">
@@ -35,7 +38,7 @@
           <span class="popup__input-error name-input-error"></span>
           <input class="popup__input popup__input_second" id="about-input" type="text" name="about" value="" placeholder="О себе" minlength="2" maxlength="200" required>
           <span class="popup__input-error about-input-error"></span>
-          <button class="popup__save-button" type="submit">Сохранить</button>
+          <button class="popup__submit-button" type="submit">Сохранить</button>
         </form>
         <button class="popup__close-button" type="button"></button>
       </div>
@@ -48,7 +51,7 @@
           <span class="popup__input-error title-input-error"></span>
           <input class="popup__input popup__input_second" id="link-input" type="url" name="link" value="" placeholder="Ссылка на картинку" required>
           <span class="popup__input-error link-input-error"></span>
-          <button class="popup__save-button" type="submit">Сохранить</button>
+          <button class="popup__submit-button" type="submit">Создать</button>
         </form>
         <button class="popup__close-button" type="button"></button>
       </div>
@@ -62,6 +65,26 @@
         <button class="popup__close-button" type="button"></button>
       </div>
     </section>
+    <section class="popup popup_type_delete-confirm">
+      <div class="popup__container">
+        <h2 class="popup__title">Вы уверены?</h2>
+        <form class="popup__form" name="delete-confirm" novalidate>
+          <button class="popup__submit-button" type="submit">Да</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
+    </section>
+    <section class="popup popup_type_change-avatar">
+      <div class="popup__container">
+        <h2 class="popup__title">Обновить аватар</h2>
+        <form class="popup__form" name="change_avatar" novalidate>
+          <input class="popup__input popup__input_first" id="avatar-input" type="url" name="avatar" value="" placeholder="Ссылка на аватар" required>
+          <span class="popup__input-error avatar-input-error"></span>
+          <button class="popup__submit-button" type="submit">Сохранить</button>
+        </form>
+        <button class="popup__close-button" type="button"></button>
+      </div>
+    </section>
   </div>
   <template id="picture-template">
     <div class="elements__element">
@@ -70,9 +93,12 @@
       </button>
       <div class="elements__name-and-like">
         <h2 class="elements__title">Красноярск</h2>
-        <button class="elements__like" type="button"></button>
+        <div class="elements__like-container">
+          <button class="elements__like" type="button"></button>
+          <span class="elements__like-counter">0</span>
+        </div>
       </div>
-      <button class="elements__remove" type="button"></button>
+      <button class="elements__remove" type="button" disabled></button>
     </div>
   </template>
 </body>

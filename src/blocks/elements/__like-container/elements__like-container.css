@@ -1,0 +1,7 @@
+.elements__like-container{
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  align-content: space-between;
+  justify-content: space-between;
+}

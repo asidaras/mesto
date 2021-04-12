@@ -6,6 +6,14 @@ export default class UserInfo{
     this._profileAbout = document.querySelector(this._about);
   }
 
+  setUserId(id){
+    this._id = id;
+  }
+
+  getUserId(){
+    return this._id;
+  }
+
   getUserInfo(){
     return {
       profileName: this._profileName.textContent, 

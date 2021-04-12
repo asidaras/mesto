@@ -1,8 +1,10 @@
 export default class Card {
-  constructor(name, link, handleCardClick, templateSelector) {
+  constructor({name, link, handleCardClick, handleDeletePicture, handleLikePicture}, templateSelector) {
     this._name = name;
     this._link = link;
     this._handleCardClick = handleCardClick;
+    this._handleDeletePicture = handleDeletePicture;
+    this._handleLikePicture = handleLikePicture;
     this._templateSelector = templateSelector;
   }
 
@@ -20,38 +22,55 @@ export default class Card {
   _likePicture() {
     this._pictureElement
       .querySelector(".elements__like")
-      .classList.toggle("elements__like_active");
-  }
-
-  _deletePicture() {
-    this._pictureElement.remove();
+      .classList.add("elements__like_active");
   }
 
   _setEventListeners() {
     this._pictureElement
       .querySelector(".elements__like")
-      .addEventListener("click", () => {
-        this._likePicture();
-      });
+      .addEventListener("click", this._handleLikePicture);
     this._pictureElement
       .querySelector(".elements__remove")
-      .addEventListener("click", () => {
-        this._deletePicture();
-      });
+      .addEventListener("click", this._handleDeletePicture);
     this._pictureElement
       .querySelector(".elements__image-container")
       .addEventListener("click", this._handleCardClick);
   }
 
-  createCard() {
+  getCardId(){
+    return this._id;
+  }
+
+  createCard({id, isMy=false, likes, userId}) {
     this._pictureElement = this._getPictureTemplate();
+    this._pictureElement.setAttribute("id", id); //установка id элементов в вёрстку
+    this._id = id;
+    if (isMy){
+      const removeElement = this._pictureElement.querySelector(".elements__remove");
+      removeElement.classList.add("elemenst__remove_type_active");
+      removeElement.removeAttribute("disabled");
+    }
     this._setEventListeners();
     const pictureElementImage = this._getPictureElementImage();
     pictureElementImage.src = this._link;
     pictureElementImage.alt = this._name;
-    this._pictureElement.querySelector(
-      ".elements__title"
-    ).textContent = this._name;
+    this._pictureElement.querySelector(".elements__title").textContent = this._name;
+
+    const pictureLikeCounter = this._pictureElement.querySelector(".elements__like-counter");
+
+    likes.forEach(user => { //установка лайков для тех карточек, которые лайкнуты
+      for (let key in user){
+        if (key != "_id"){
+          continue;
+        }
+        else{
+          if(user[key] === userId)
+            this._likePicture();
+        }
+      }
+    });
+
+    pictureLikeCounter.textContent = likes.length; //счётчик лайков
 
     return this._pictureElement;
   }
