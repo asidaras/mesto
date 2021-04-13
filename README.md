@@ -11,3 +11,7 @@
 + Объекты отдельным модулем
 + Валидация отдельным модулем
 + Webpack сборка
+
+## Ссылка gh-pages:
+
+https://antonsidaras.github.io/mesto/
