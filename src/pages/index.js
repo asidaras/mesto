@@ -16,7 +16,13 @@ import {
 } from '../utils/constants.js';
 
 let places; //Список карточек с местами
-const api = new Api({server: "https://mesto.nomoreparties.co", token: "353f5b3a-f1c1-4e51-8411-778e0e42b67e", cohort: "cohort-22"});
+const api = new Api({server: "https://mesto.nomoreparties.co", token: "353f5b3a-f1c1-4e51-8411-778e0e42b67e", cohort: "cohort-22", handleResponse: (res) => {
+  if (!res.ok) {
+    return Promise.reject(`Ошибка: ${res.status}`);
+  }
+  return res.json();
+}});
+
 const userInfo = new UserInfo({name: ".profile__name", about: ".profile__about"}); //получение данных профиля
 const userAvatar = new UserAvatar({avatar: ".profile__avatar"});
 const popupWithImage = new PopupWithImage(".popup_type_img"); //создание экземпляра класса попапа картинки
@@ -49,11 +55,11 @@ const popupWithConfirm = new PopupWithConfirm(".popup_type_delete-confirm", (eve
   api.removeCard(cardToRemove.id)
   .then(() => {
     places.removeItem(cardToRemove);
+    popupWithConfirm.close();
   })
   .catch((error) => {
     alert(error);
   });
-  popupWithConfirm.close();
 });
 
 const popupWithFormEdit = new PopupWithForm(".popup_type_edit", (event) => { //создание экземпляра класса формы изменения данных профиля
@@ -205,9 +211,10 @@ function renderUserInfoFromServer(){
 function renderInitalCardsFromServer(){
   api.getInitialCards()
   .then((result) => {
-    places = new Section({items: result, 
-      renderer: (item) => {
-        if (item.owner._id === userInfo.getUserId()){
+    places = new Section(
+      {
+        items: result, 
+        renderer: (item) => {
           places.addItem(
             createCard(
             {
@@ -215,24 +222,12 @@ function renderInitalCardsFromServer(){
               userId: userInfo.getUserId(),
               name: item.name, 
               title: item.link, 
-              isMy: true,
+              isMy: item.owner._id === userInfo.getUserId(),
               likes: item.likes
-            }));
+            })
+          );
         }
-        else{
-          places.addItem(
-            createCard(
-            {
-              id: item._id,
-              userId: userInfo.getUserId(),
-              name: item.name, 
-              title: item.link,
-              isMy: false,
-              likes: item.likes
-            }));
-        }
-      }
-    }, ".elements");
+      }, ".elements");
     places.renderItems();
   })
   .catch((error) => {

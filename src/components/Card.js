@@ -58,17 +58,10 @@ export default class Card {
 
     const pictureLikeCounter = this._pictureElement.querySelector(".elements__like-counter");
 
-    likes.forEach(user => { //установка лайков для тех карточек, которые лайкнуты
-      for (let key in user){
-        if (key != "_id"){
-          continue;
-        }
-        else{
-          if(user[key] === userId)
-            this._likePicture();
-        }
-      }
-    });
+    const isLiked = likes.some((like) => like._id === userId);
+    if (isLiked) { 
+      this._likePicture();
+    } 
 
     pictureLikeCounter.textContent = likes.length; //счётчик лайков
 
